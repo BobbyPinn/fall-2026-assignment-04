@@ -14,8 +14,16 @@ if (!existsSync(input)) {
 }
 
 // Run the Mermaid CLI (mmdc) to compile the .mmd file into an .svg
+const libPath = '/home/jessu/.local/lib/usr/lib/x86_64-linux-gnu';
+const env = {
+  ...process.env,
+  LD_LIBRARY_PATH: process.env.LD_LIBRARY_PATH
+    ? `${libPath}:${process.env.LD_LIBRARY_PATH}`
+    : libPath,
+};
 const result = spawnSync('npx', ['mmdc', '-i', input, '-o', output], {
   encoding: 'utf-8',
+  env,
 });
 
 // If mmdc failed, report the error and exit with code 1
